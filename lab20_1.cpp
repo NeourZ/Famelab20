@@ -20,20 +20,63 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
-
+void importDataFromFile(string  fname, vector<string>& studentlist, vector<int>& score ,vector<char>& grade){
+    ifstream stulist(fname) ;
+    string infor ;
+    char format[] = "%[^:]:%d %d %d";
+    int f,s,t ;
+    char stuname[100] ;
+    int ova ;
+    while(getline(stulist, infor)){
+        const char * newinfor = infor.c_str() ;
+        sscanf(newinfor,format,stuname,&f,&s,&t) ;
+        ova = f+s+t ;
+        studentlist.push_back(stuname) ;
+        score.push_back(ova) ;
+        grade.push_back(score2grade(ova)) ;
+    }
+    stulist.close() ;
 }
 
-void getCommand(){
-
+void getCommand(string &command, string &key){
+    cout << "Please input your command: " ;
+    cin >> command ;
+    if(toUpperStr(command) == "NAME" || toUpperStr(command) == "GRADE"){
+        cin.ignore() ;
+        getline(cin,key) ;
+    }
 }
 
-void searchName(){
-
+void searchName(vector<string>& studentlist, vector<int>& score ,vector<char>& grade,string key){
+    int count = 0 ;
+    cout << "---------------------------------\n";
+    for(unsigned int i = 0 ; i < studentlist.size(); i++){
+        if(key == toUpperStr(studentlist[i])){
+            cout << studentlist[i] << "'s score = " << score[i] << '\n' ;
+            cout << studentlist[i] << "'s grade = " << grade[i] << '\n' ;
+            count++ ;
+        }
+        else if (i == studentlist.size() - 1 && count == 0){
+            cout << "Cannot found." << '\n' ;
+        }
+    }
+    cout << "---------------------------------\n";
 }
 
-void searchGrade(){
-
+void searchGrade(vector<string>& studentlist, vector<int>& score ,vector<char>& grade,string key){
+    int count = 0 ;
+    char fkey = key[0] ;
+    cout << "---------------------------------\n";
+    for(unsigned int i = 0 ; i < studentlist.size(); i++){
+        if(fkey == grade[i]){
+            cout << studentlist[i] << " (" << score[i] << ")" << '\n' ;
+            count++ ;
+        }
+        else if (i == studentlist.size() - 1 && count == 0){
+            cout << "Cannot found." << '\n' ;
+        }
+    }
+    cout << "---------------------------------\n";
 }
 
 
